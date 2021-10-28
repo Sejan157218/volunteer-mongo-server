@@ -48,6 +48,29 @@ async function run() {
             const result = await registrationCollection.insertOne(resultfind);
             res.json(result)
         })
+
+        app.get('/registeruser', async (req, res) => {
+            const result = await registrationCollection.find({}).toArray();
+            res.send(result)
+        })
+        app.delete('/registeruser/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await registrationCollection.deleteOne(query);
+            res.json(result)
+        })
+        app.get('/myevent/:email', async (req, res) => {
+            const email = req.params.email
+            const emailfind = { user_email: { $regex: email } }
+            const result = await registrationCollection.find(emailfind).toArray();
+            res.send(result);
+        })
+        app.delete('/myevent/:email/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await registrationCollection.deleteOne(query);
+            res.json(result)
+        })
     } finally {
         //   await client.close();
     }
